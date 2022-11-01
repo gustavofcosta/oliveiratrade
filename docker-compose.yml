@@ -1,29 +1,13 @@
 version: '3.9'
 services:
-  nest-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: nest-api
-    restart: always
-    ports:
-      - 3002:3002
-    depends_on:
-      - postgres
-    env_file:
-      - .env
-
-  postgres:
+  oliveiratrade_db:
+    container_name: oliveiratrade_db
     image: postgres:13
-    container_name: postgresprisma
-    restart: always
     ports:
       - 5432:5432
-    env_file:
-      - .env
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_NAME: ${DATA_NAME}
     volumes:
       - postgres:/var/lib/postgresql/data
-
-volumes:
-  postgres:
-    name: nest-prisma-docker-db

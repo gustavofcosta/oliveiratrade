@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  oliveiratrade_db:
+    container_name: oliveiratrade_db
+    image: postgres:13
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_NAME: ${DATA_NAME}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  app:
+    build: .
+    container_name: 'api-oliveiratrade'
+    command: sh -c "npm run start:dev"
+    ports:
+      - 3000:3000
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_HOST: ${DATABASE_HOST}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_NAME: ${DATA_NAME}
+
+    volumes:
+      - .:/usr/app
+    links:
+      - oliveiratrade_db
+    depends_on:
+      - oliveiratrade_db
